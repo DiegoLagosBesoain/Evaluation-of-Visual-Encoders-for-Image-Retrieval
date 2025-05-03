@@ -1,0 +1,2 @@
+
+    if MODEL=="DINO":
