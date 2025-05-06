@@ -11,9 +11,9 @@ import clip
 # data_dir = '/hd_data/Paris/'
 # image_dir = os.path.join(data_dir, 'paris')
 # val_file = 'data/val_paris.txt'
-DATASET = 'simple1K'
-MODEL = 'resnet18'
-data_dir = 'simple1K'
+DATASET = 'Paris_val'
+MODEL = 'resnet34'
+data_dir = 'Paris_val'
 image_dir = os.path.join(data_dir, 'images')
 list_of_images = os.path.join(data_dir, 'list_of_images.txt')
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import average_precision_score, precision_recall_curve
 
-DATASET   = 'simple1K'
+DATASET   = 'VOC_val'
 MODELS    = ['resnet18', 'resnet34', 'DINO', 'CLIP']
 data_dir  = DATASET
 image_dir = os.path.join(data_dir, 'images')
@@ -64,12 +64,10 @@ def show_queries(sim_idx, ranking, APs, model_name, N=5):
     for kind, qs in [("Top", ranking[:N]), ("Bottom", ranking[-N:])]:
         fig, axes = plt.subplots(N, 6, figsize=(6*1.5, N*1.5))
         for row, q in enumerate(qs):
-            # índices de la query + top-5
             imgs = sim_idx[q, :6]
             for col, idx in enumerate(imgs):
                 ax = axes[row, col]
                 im = io.imread(os.path.join(image_dir, files[idx][0]))
-                # redimensiona manteniendo proporción
                 h, w = im.shape[:2]
                 size = 64
                 im2 = transform.resize(im, (int(size*h/w), size)) if h>w else transform.resize(im, (size, int(size*w/h)))
