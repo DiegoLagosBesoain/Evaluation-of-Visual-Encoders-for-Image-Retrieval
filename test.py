@@ -1,11 +1,13 @@
 import numpy as np
 import skimage.io as io
 import skimage.transform as transform
+import matplotlib
+
 import matplotlib.pyplot as plt
 import os
 from sklearn.metrics import average_precision_score, precision_recall_curve
 
-DATASET   = 'VOC_val'
+DATASET   = 'Paris_val'
 MODELS    = ['resnet18', 'resnet34', 'DINO', 'CLIP']
 data_dir  = DATASET
 image_dir = os.path.join(data_dir, 'images')
@@ -42,6 +44,20 @@ def evaluate_model(model_name):
     y_true_glob  = np.concatenate(all_true)
     scores_glob  = np.concatenate(all_scores)
     prec, rec, _ = precision_recall_curve(y_true_glob, scores_glob)
+    recall_levels = np.linspace(0.0, 1.0, 11)
+    prec_interp = [max(prec[rec >= r]) if np.any(rec >= r) else 0 for r in recall_levels]
+
+    
+    plt.figure(figsize=(6,4))
+    plt.plot(rec, prec, linestyle='--', alpha=0.5, label='Original PR curve')
+    plt.plot(recall_levels, prec_interp, marker='o', label='11-point interpolated')
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.title(f"Precision–Recall (Interpolated) – {model_name}")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
 
     plt.figure(figsize=(6,4))
     plt.plot(rec, prec)
